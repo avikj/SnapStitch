@@ -6,3 +6,7 @@
 *.mp4
 *.swp
 *~*
+*.pyc
+venv/
+videos/
+*.DS_Store
