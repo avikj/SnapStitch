@@ -109,7 +109,13 @@ def main(_):
   filename_to_emb = compute_embeddings(images)
   with open(FLAGS.output_file, 'w') as output_file:
     pickle.dump(filename_to_emb, output_file)
-
+  embs = []
+  with open('filenames.tsv', 'w') as filenames_file:
+    for filename, emb in filename_to_emb.iteritems():
+      filenames_file.write(filename+'\n')
+      embs.append(emb)
+  embs = np.array(embs)
+  np.savetxt('embs.tsv', embs, delimiter='\t')
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
   # classify_image_graph_def.pb:
