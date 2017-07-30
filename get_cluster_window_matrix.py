@@ -22,11 +22,18 @@ def get_centroid(clust):
 	centroid = np.mean(clust_points, axis=0)
 	return centroid
 
-def get_error(win, centroid):
-	embeds = np.array([get_embed(frame) for frame in win])
-	diffs = embeds - centroid
-	errors = np.linalg.norm(diffs, ord=2, axis=1)
-	return np.mean(errors)
+def get_error(win, filenames):
+	win_embeds = np.array([get_embed(frame) for frame in win])
+	clust_embeds = np.array([get_embed(filename) for filename in filenames])
+	error_sum = 0
+	count = 0
+	for win_embed in win_embeds:
+		win_error = float('inf')
+		for clust_embed in clust_embeds:
+			win_error = min(win_error, np.linalg.norm(win_embed-clust_embed))
+		error_sum += win_error
+		count += 1
+	return error_sum/count
 
 def compute_win_clust_mat(filename_to_clust, window_size=30):
 	clust_to_filename = get_clust_to_filename(filename_to_clust)
@@ -38,7 +45,7 @@ def compute_win_clust_mat(filename_to_clust, window_size=30):
 		if clust == -1: continue
 		filenames = clust_to_filename[clust]
 		centroid = get_centroid(filenames)
-		errors = np.array([get_error(win, centroid) for win in wins])
+		errors = np.array([get_error(win, filenames) for win in wins])
 		win_clust_vecs.append(errors)
 	win_clust_mat = np.vstack(np.array(win_clust_vecs))
 	return (win_clust_mat, wins)
@@ -48,6 +55,19 @@ def get_best_seqs(projid, window_size=30):
 	print 'loading clustered frames...'
 	with open(os.path.join('temp', projid, 'filename_to_clust.pkl'), 'rb') as stream:
 		filename_to_clust = pickle.load(stream)
+	embs = []
+	filenames = []
+	labels = []
+	for vid in filename_to_clust.keys():
+		for filename, label in filename_to_clust[vid].iteritems():
+			embs.append(get_embed(filename))
+			filenames.append(filename)
+			labels.append(label)
+	np.savetxt('embs.tsv', embs, delimiter='\t')
+	with open('metadata.tsv', 'w') as mfile:
+		mfile.write('labels\tfilename\n')
+		for i in range(len(filenames)):
+			mfile.write('%d\t%s\n'%(labels[i], filenames[i]))
 
 	# contruct matrix for every video
 	video_names = [os.path.join('videos', projid, v+'.m4v') for v in filename_to_clust.keys()]
@@ -75,7 +95,9 @@ def get_best_seqs(projid, window_size=30):
 	argmins = np.argmin(mat, axis=0)
 
 	vid_indices = [bisect.bisect(indices, argmin)-1 for argmin in argmins]
-	best_seqs = [(video_names[vid_indices[x]], [int(k[-13:-4]) for k in flattened_wins[argmins[x]]]) for x in xrange(len(vid_indices))]
+		
+	best_seqs = [(video_names[vid_indices[x]], [int(k[-13:-4]) for k in flattened_wins[argmins[x]]], x) for x in xrange(len(vid_indices))]
+	print best_seqs
 
 	# remove overlap
 	vid_seq_dict = {k:[] for k in set([seq[0] for seq in best_seqs])}
@@ -96,6 +118,8 @@ def get_best_seqs(projid, window_size=30):
 					j -= 1
 				j += 1
 			i += 1
+
+
 	return vid_seq_dict
 	# return best_seqs
 

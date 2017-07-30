@@ -13,7 +13,7 @@ def main(project_id):
     get_inception_embeddings(project_id, video_basename[:video_basename.index('.')])
   video_names = [video_basename[:video_basename.index('.')] for video_basename in video_basenames]
   get_clusters_for_project(project_id, video_names)
-  result_seqs = get_best_seqs(project_id, window_size=10)
+  result_seqs = get_best_seqs(project_id, window_size=5)
   print result_seqs
   if not os.path.isdir('results'):
     os.mkdir('results')
