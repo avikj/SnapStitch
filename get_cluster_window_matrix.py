@@ -5,8 +5,8 @@ import pickle
 FRAME_PATH = '/frames/...'
 SLIDING_WINDOW_SIZE = 30
 
-cluster_filename = 'test.pickle'
-t = (2, {'frame1.jpg':0,'frame2.jpg':0,'frame3.jpg':1,'frame4.jpg':1})
+# cluster_filename = 'test.pickle'
+# t = (2, {'frame1.jpg':0,'frame2.jpg':0,'frame3.jpg':1,'frame4.jpg':1})
 
 with open(cluster_filename, 'wb') as stream:
 	pickle.dump(t, stream)
@@ -17,9 +17,11 @@ def get_filenames_to_clusters(filename):
 	return data
 
 # returns dictionary with keys of cluster numbers and values of frames
-def get_cluster_to_filenames(num_clusts, filenames_to_cluster):
+def get_cluster_to_filenames(filenames_to_cluster):
+	num_clusts = np.max(np.array([clust for clust in filenames_to_cluster.values()])) + 1
 	cluster_to_filenames = {k:[] for k in range(num_clusts)}
 	for frame, clust in filenames_to_cluster.iteritems():
+		if clust == -1: continue
 		cluster_to_filenames[clust].append(frame)
 	return cluster_to_filenames
 
@@ -59,8 +61,8 @@ def get_best_windows(cluster_to_filenames):
 
 
 # get clustered frames
-(num_clusts, filenames_to_cluster) = get_filenames_to_clusters(cluster_filename)
-cluster_to_filenames = get_cluster_to_filenames(num_clusts, filenames_to_cluster)
+filenames_to_cluster = get_filenames_to_clusters(cluster_filename)
+cluster_to_filenames = get_cluster_to_filenames(filenames_to_cluster)
 
-# get matrix
+# get best windows
 best_wins = get_best_windows(cluster_to_filenames)
