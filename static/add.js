@@ -23,5 +23,7 @@ function run(){
 		xhr.setRequestHeader("postman-token", "066936fa-34af-fde5-da46-536332020ce8");
 
 		xhr.send(formData);
+		var overlay = document.querySelector('#overlay')
+		overlay.style.display = "flex";
 	});
 };
