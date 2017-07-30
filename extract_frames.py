@@ -15,7 +15,7 @@ def main(project_id, video_basename, sampling_rate=3):
     # os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'  # or any {'0', '1', '2'}
     video_name = video_basename[:video_basename.index('.')]
     # extract video frames
-    extracted_frame_dir = os.path.join('static', project_id, video_name, 'frames')
+    extracted_frame_dir = os.path.join('temp', project_id, video_name, 'frames')
     mkdir_p(extracted_frame_dir)
     if not os.path.isdir(extracted_frame_dir):
         os.mkdir(extracted_frame_dir)
