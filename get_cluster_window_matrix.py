@@ -76,11 +76,32 @@ def get_best_seqs(projid, window_size=30):
 
 	vid_indices = [bisect.bisect(indices, argmin)-1 for argmin in argmins]
 	best_seqs = [(video_names[vid_indices[x]], [int(k[-13:-4]) for k in flattened_wins[argmins[x]]]) for x in xrange(len(vid_indices))]
-	return best_seqs
+
+	# remove overlap
+	vid_seq_dict = {k:[] for k in set([seq[0] for seq in best_seqs])}
+	for seq in best_seqs: vid_seq_dict[seq[0]].append(seq[1])
+	print '\n'
+	print vid_seq_dict
+	for vid in vid_seq_dict.keys():
+		vid_seq_dict[vid]
+		i = 0
+		while i < len(vid_seq_dict[vid]):
+			j = i+1
+			while j < len(vid_seq_dict[vid]):
+				if vid_seq_dict[vid][i][0] <= vid_seq_dict[vid][j][1] and vid_seq_dict[vid][j][0] <= vid_seq_dict[vid][i][1]: # segments overlap
+					# set vid_seq_dict[vid][i] to merged interval
+					# remove vid_seq_dict[vid][j]
+					vid_seq_dict[vid][i] = [min(vid_seq_dict[vid][i][0], vid_seq_dict[vid][j][0]), max(vid_seq_dict[vid][i][1], vid_seq_dict[vid][j][1])]
+					del vid_seq_dict[vid][j]
+					j -= 1
+				j += 1
+			i += 1
+	return vid_seq_dict
+	# return best_seqs
 
 if __name__ == "__main__":
 	projid = sys.argv[1]
 	# window_size
 	seqs = get_best_seqs(projid)
-	print seqs
+	# print seqs
 
