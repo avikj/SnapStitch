@@ -27,7 +27,7 @@ def file(groupid):
 	if os.path.isfile(os.path.join(os.getcwd(),'results/{0}.m4v'.format(groupid))):
 		return jsonify(groupid=groupid)
 	else:
-		return 404
+		abort(404)
 
 @app.route('/add')
 def add():
