@@ -53,4 +53,4 @@ def upload():
 	return jsonify(groupid=groupid, time=totaltime)
 
 if __name__ == '__main__':
-	app.run(debug=True, host="0.0.0.0")
+	app.run(debug=True, threaded=True, host="0.0.0.0", port=6006)
