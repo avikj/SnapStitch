@@ -1,0 +1,31 @@
+* {
+	margin: 0;
+	padding: 0;
+	font-family: 'Open Sans', sans-serif;
+}
+
+#header{
+	background-color: rgba(255,45,85,0.9);
+	height: 7vh;
+	margin: 0;
+	color: white;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	font-size: 35pt;
+	font-weight: 500;
+}
+
+#body{
+	background-color: #F1F1F6;
+	height: 90vh;
+}
+
+#title{
+	color: black;
+	font-size: 43pt;
+	padding-top: 3vh;
+	font-weight: 700;
+	padding-left: 4vw;
+}
