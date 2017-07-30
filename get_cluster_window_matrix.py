@@ -35,7 +35,7 @@ def get_centroid(cluster):
 
 def get_avg_error(window, centroid):
 	frames = np.array([get_frame_vector(frame) for frame in window])
-	assert(frames.shape[0] == len(window) and frames[1] == 2048)
+	assert(frames.shape[0] == len(window) and frames.shape[1] == 2048)
 	diffs = frames - centroid
 	errors = np.linalg.norm(diffs, ord=2, axis=1)
 	avg_error = np.mean(dists)
