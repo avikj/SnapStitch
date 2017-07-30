@@ -99,24 +99,24 @@ def compute_embeddings(images):
       print(image, i, len(images))
   return filename_to_emb
 
-# static_dir is a subdir of static 
+# temp_dir is a subdir of temp 
 def main(project_id, video_name):
   '''image = (FLAGS.image_file if FLAGS.image_file else
            os.path.join(MODEL_DIR, 'cropped_panda.jpg'))'''
-  static_dir = os.path.abspath(os.path.join('static', project_id, video_name))
-  print(static_dir)
+  temp_dir = os.path.abspath(os.path.join('temp', project_id, video_name))
+  print(temp_dir)
   print('loading images')
-  image_dir = os.path.join(static_dir, 'frames')
+  image_dir = os.path.join(temp_dir, 'frames')
   images = [os.path.join(dp, f) for dp, dn, filenames in os.walk(image_dir) for f in filenames if os.path.splitext(f)[1].lower() in '.jpg.jpeg']
   print(images)
   print('computing embeddings')
   filename_to_emb = compute_embeddings(images)
-  if not os.path.isdir(os.path.join(static_dir, 'embeddings')):
-    os.mkdir(os.path.join(static_dir, 'embeddings'))
+  if not os.path.isdir(os.path.join(temp_dir, 'embeddings')):
+    os.mkdir(os.path.join(temp_dir, 'embeddings'))
   for img_filename, emb in filename_to_emb.iteritems():
     emb_filename = img_filename[:-20]+'embeddings'+img_filename[-14:-4]+'.npy'
     np.save(emb_filename, emb)
-  pickle_filename = os.path.join(static_dir, 'filename_to_emb.pkl')
+  pickle_filename = os.path.join(temp_dir, 'filename_to_emb.pkl')
   with open(pickle_filename, 'w') as output_file:
     pickle.dump(filename_to_emb, output_file)
   embs = []

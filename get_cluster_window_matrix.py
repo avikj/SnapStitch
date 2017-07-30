@@ -46,7 +46,7 @@ def compute_win_clust_mat(filename_to_clust, window_size=30):
 def get_best_seqs(projid, window_size=30):	
 	# load clustered frames
 	print 'loading clustered frames...'
-	with open(os.path.join('static', projid, 'filename_to_clust.pkl'), 'rb') as stream:
+	with open(os.path.join('temp', projid, 'filename_to_clust.pkl'), 'rb') as stream:
 		filename_to_clust = pickle.load(stream)
 
 	# contruct matrix for every video
