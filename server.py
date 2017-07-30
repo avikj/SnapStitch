@@ -3,6 +3,8 @@ from flask_cors import CORS, cross_origin
 import time
 import os
 import random
+import threading
+from video_processing import main as video_processing
 
 app = Flask(__name__)
 
@@ -51,7 +53,9 @@ def upload():
 		file.save(os.path.join(savelocation,file.filename))
 	endtime = time.time()
 	totaltime = endtime-starttime
+	thread = threading.Thread(target=video_processing, args=(str(groupid),))
+	thread.start()
 	return jsonify(groupid=groupid, time=totaltime)
 
 if __name__ == '__main__':
-	app.run(debug=True, host="0.0.0.0")
+	app.run(debug=True, threaded=True, host="0.0.0.0", port=6006)
