@@ -3,10 +3,19 @@
 		<link rel="stylesheet" href="{{ url_for('static', filename='add.css') }}">
 		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300i,400,700" rel="stylesheet">
 	</head>
-	<body id="bg">
-		<div id="input-header">SnapStich Name</div>
-		<div id="input-header">Snapstitch Description</div>
-		<div id="vid-input"> adf</div>
-		<div id="check">asdf</div>
+	<body id="bg" onload="run()">
+		<div id="namediv">
+			<div  id="input-header">Project Name</div>
+			<input class="textinput" type="text"></input>
+		</div>
+		<div id="descripdiv">
+			<div  id="input-header">Project Description</div>
+			<input class="textinput" type="text"></input>
+		</div>
+		<form action="/loading" enctype="multipart/form-data" method="post" style="background-image: url({{ url_for('static', filename='upload.png') }})">
+			<input id="vid-input" name="vidinput" type="file" multiple></input>
+		</form>
+		<p>Tap Here to select some videos</p>
+		<script src="{{ url_for('static', filename='add.js') }}"></script>
 	</body>
 </html>
