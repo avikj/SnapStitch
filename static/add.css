@@ -16,7 +16,7 @@ body {
 	position: fixed;
 	text-align: center;
 	line-height: 100vh;
-	z-index: 2;
+	z-index: 10000;
 	display: none;
 	background-color: rgb(255,60,94.44);
 	

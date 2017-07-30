@@ -11,7 +11,7 @@ def stitch(data, output):
 
 
 def parseClip(file, start, end):
-    return VideoFileClip(file).subclip(start,end+1).crossfadein(1)
+    return VideoFileClip(file).subclip(start,end).crossfadein(1)
 
 
 if __name__ == '__main__':

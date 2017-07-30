@@ -16,10 +16,10 @@ def allowed_file(filename):
 
 @app.route('/results/<filename>')
 def results(filename):
-    if not os.path.isfile(os.path.join('results', filename)):
+    if not os.path.isfile(os.path.join('results', 'finished_'+filename[:filename.rindex('.')]+'.txt')):
         abort(404)
         return
-	return send_from_directory('results',filename)
+    return send_from_directory('results',filename)
 
 @app.route('/<groupid>')
 def index(groupid):
