@@ -24,6 +24,6 @@ function run(){
 
 		xhr.send(formData);
 		var overlay = document.querySelector('#overlay')
-		overlay.style.display = "flex";
+		overlay.style.display = "block";
 	});
 };

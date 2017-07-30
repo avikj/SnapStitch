@@ -5,6 +5,7 @@ function run(gid){
 		xhr.addEventListener("readystatechange", function () {
 			if (this.readyState === 4 && xhr.status == 200) {
 				window.location.href = "/" + gid
+				alert('fuck me')
 				clearInterval(inter)
 			}
 		});
