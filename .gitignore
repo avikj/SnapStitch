@@ -1,3 +1,4 @@
+*.npy
 *.pkl
 *.txt
 *.m4v
