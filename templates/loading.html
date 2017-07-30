@@ -1,10 +1,10 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="{{ url_for('static', filename='loading.css') }}">
-		<script src="{{ url_for('static', filename='loading.js') }}"></script>
 		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300i,400,700" rel="stylesheet">
 	</head>
-	<body>
+	<body onload="run({{ groupid }})">
 		<p>Loading...</p>
 	</body>
+	<script src="{{ url_for('static', filename='loading.js') }}"></script>
 </html>
