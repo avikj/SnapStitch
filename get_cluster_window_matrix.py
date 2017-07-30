@@ -50,7 +50,7 @@ def get_best_seqs(projid, window_size=30):
 		filename_to_clust = pickle.load(stream)
 
 	# contruct matrix for every video
-	video_names = [os.path.join('videos', projid, v) for v in filename_to_clust.keys()]
+	video_names = [os.path.join('videos', projid, v+'.mp4') for v in filename_to_clust.keys()]
 	print 'video names: ' + ' '.join(video_names)
 	mat_wins = [compute_win_clust_mat(video_clustered_frames, window_size) for video_clustered_frames in filename_to_clust.values()]
 	matrices = [mat_win[0] for mat_win in mat_wins]
@@ -75,15 +75,12 @@ def get_best_seqs(projid, window_size=30):
 	argmins = np.argmin(mat, axis=0)
 
 	vid_indices = [bisect.bisect(indices, argmin)-1 for argmin in argmins]
-	best_seqs = [(video_names[vid_indices[x]], flattened_wins[argmins[x]]) for x in xrange(len(vid_indices))]
+	best_seqs = [(video_names[vid_indices[x]], [int(k[-13:-4]) for k in flattened_wins[argmins[x]]]) for x in xrange(len(vid_indices))]
 	return best_seqs
 
 if __name__ == "__main__":
 	projid = sys.argv[1]
 	# window_size
 	seqs = get_best_seqs(projid)
-	for seq in seqs:
-		vid = seq[0]
-		tup = [x[-13:-4] for x in seq[1]]
-		print seq[0] + ' -- ' + str(int(tup[0])) + ' ' + str(int(tup[1]))
+	print seqs
 
