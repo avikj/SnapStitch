@@ -4,6 +4,27 @@
 	font-family: 'Open Sans', sans-serif;
 }
 
+.vidcontainer{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	font-size: 35pt;
+	font-weight: 700;
+	width: 40vw;
+	overflow: wrap;
+	padding-left: 5vw;
+	padding-right: 5vw;
+	padding-top: 5vh;
+}
+
+#viddiv{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	padding-top: 5vh
+	width: 100vw;
+}
+
 #header{
 	background-color: rgba(255,45,85,0.9);
 	height: 7vh;
@@ -17,9 +38,15 @@
 	font-weight: 500;
 }
 
+.vid{
+	width: 40vw;
+	height: 40vw;
+	object-fit: initial;
+}
+
 #body{
 	background-color: #F1F1F6;
-	height: 90vh;
+	height: 100vh;
 }
 
 #title{
