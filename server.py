@@ -41,7 +41,7 @@ def upload():
 	if request.args.get('groupid'):
 		groupid = request.args.get('groupid')
 	else:
-		groupid = 123
+		groupid = time.time()
 	f = request.files.getlist('vidfiles')
 	savelocation = './videos/{0}'.format(groupid)
 	if not os.path.exists(savelocation):
