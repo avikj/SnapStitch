@@ -5,7 +5,7 @@ def stitch(data, output):
     for vid in data.keys():
         for start, end in data[vid]:
             clips.append(parseClip(vid, start/1000, end/1000).crossfadeout(1))
-    clips.append(parseClip('ending.mp4',0,2))
+    clips.append(parseClip('ending.mp4',0,2).resize(clips[0].size))
     result = concatenate(clips, padding=-1, method="compose")
     result.write_videofile(output, fps=20, bitrate="2500k")
 
@@ -16,8 +16,6 @@ def parseClip(file, start, end):
 
 if __name__ == '__main__':
     stitch({
-        '1.mp4': [[0, 10], [15, 20]],
-        '2.mp4': [[0, 10]],
-        '3.mp4': [[0,8], [12,17]],
-        '4.mp4': [[12,20]]
+        '1.mp4': [[0, 8000], [10000, 4000]],
+        '2.mp4': [[0, 5000]]
     }, 'sex.mp4')
