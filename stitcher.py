@@ -3,8 +3,8 @@ from moviepy.editor import *
 def stitch(data, output):
     clips = []
     for vid in data.keys():
-        for seq in data[vid]:
-            clips.append(parseClip(vid, seq[0], seq[1]))
+        for start, end in data[vid]:
+            clips.append(parseClip(vid, start/1000, end/1000).crossfadeout(1))
     result = concatenate(clips, padding=-1, method="compose")
     result.write_videofile(output, fps=20, bitrate="2500k")
 
