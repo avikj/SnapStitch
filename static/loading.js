@@ -1,4 +1,8 @@
 function run(gid){
+	setTimeout(function(){
+		document.querySelector('.loading').innerHTML="Stitching together"
+	},27000)
+
 	var inter = setInterval(function(){
 		var xhr = new XMLHttpRequest();
 		xhr.addEventListener("readystatechange", function () {
