@@ -2,7 +2,8 @@ from flask import Flask, request, jsonify, render_template, abort, send_from_dir
 from flask_cors import CORS, cross_origin
 import time
 import os
-
+import threading
+from video_processing import main as video_processing
 app = Flask(__name__)
 
 ALLOWED_EXTENSIONS= set(["mp4"])
@@ -50,6 +51,8 @@ def upload():
 		file.save(os.path.join(savelocation,file.filename))
 	endtime = time.time()
 	totaltime = endtime-starttime
+	thread = threading.Thread(target=video_processing, args=(str(groupid),))
+	thread.start()
 	return jsonify(groupid=groupid, time=totaltime)
 
 if __name__ == '__main__':
