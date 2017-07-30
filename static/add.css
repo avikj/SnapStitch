@@ -1,6 +1,32 @@
 * {
 	margin: 0;
 	padding: 0;
+	background-color: transparent;
+}
+
+#namediv{
+	width: 75vw;
+	height: 20vh;
+	padding-left: 10vw;
+	padding-top: 10vh;
+}
+
+#descripdiv{
+	width: 75vw;
+	height: 20vh;
+	padding-left: 10vw;
+	padding-bottom: 7vh;
+}
+
+.textinput{
+	width: 75vw;
+	height: 5vh;
+	background-color: transparent;
+	border: 0;
+	border-bottom: 5px solid #fff;
+	font-size: 40pt;
+	color: white;
+	font-family: 'Open Sans', sans-serif;
 }
 
 #bg {
@@ -16,20 +42,59 @@
 #input-header {
 	color: white;
 	font-size: 35pt;
-	margin-left: 100px;
-	margin-top: 200px;
 	display: block;
 	font-weight: 700;
 }
 
+p{
+	margin-top: -10vh;
+	margin-left: 25vw;
+	width: 50vw;
+	text-align: center;
+	color: rgb(109,109,109);
+}
 
-#vid-input {
+#vid-input::-webkit-input-placeholder{
+	padding-left: 30vw;
+	padding-bottom: -10vh;
+}
+
+form{
+	color: black;
 	width: 80vw;
-	height: 20vh;
+	height: 40vh;
 	margin: 0 auto;
-	margin-top: 150px;
+	margin-top: -7vh;
+	margin-left: 10vw;
 	border-radius: 12px;
 	background-color: white;
+	font-size: 60pt;
+	border-radius: 3vw;
+}
+
+#vid-input{
+	color: black;
+	width: 80vw;
+	height: 40vh;
+	margin: 0 auto;
+	border-radius: 12px;
+	background-color: white;
+	font-size: 60pt;
+	border-radius: 3vw;
+	opacity: 0;
+}
+
+#{
+	color: black;
+	width: 80vw;
+	height: 40vh;
+	margin: 0 auto;
+	margin-top: -7vh;
+	margin-left: 10vw;
+	border-radius: 12px;
+	background-color: white;
+	font-size: 60pt;
+	border-radius: 3vw;
 }
 
 #check {
