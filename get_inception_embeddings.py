@@ -47,7 +47,7 @@ from six.moves import urllib
 import tensorflow as tf
 
 FLAGS = None
-
+MODEL_DIR = '/tmp/imagenet'
 # pylint: disable=line-too-long
 DATA_URL = 'http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz'
 # pylint: enable=line-too-long
@@ -56,7 +56,7 @@ def create_graph():
   """Creates a graph from saved GraphDef file and returns a saver."""
   # Creates graph from saved graph_def.pb.
   with tf.gfile.FastGFile(os.path.join(
-      FLAGS.model_dir, 'classify_image_graph_def.pb'), 'rb') as f:
+      MODEL_DIR, 'classify_image_graph_def.pb'), 'rb') as f:
     graph_def = tf.GraphDef()
     graph_def.ParseFromString(f.read())
     _ = tf.import_graph_def(graph_def, name='')
@@ -99,23 +99,33 @@ def compute_embeddings(images):
       print(image, i, len(images))
   return filename_to_emb
 
-def main(_):
+# static_dir is a subdir of static 
+def main(project_id, video_name):
   '''image = (FLAGS.image_file if FLAGS.image_file else
-           os.path.join(FLAGS.model_dir, 'cropped_panda.jpg'))'''
+           os.path.join(MODEL_DIR, 'cropped_panda.jpg'))'''
+  static_dir = os.path.abspath(os.path.join('static', project_id, video_name))
+  print(static_dir)
   print('loading images')
-  images = [os.path.join(dp, f) for dp, dn, filenames in os.walk(FLAGS.image_dir) for f in filenames if os.path.splitext(f)[1].lower() in '.jpg.jpeg']
+  image_dir = os.path.join(static_dir, 'frames')
+  images = [os.path.join(dp, f) for dp, dn, filenames in os.walk(image_dir) for f in filenames if os.path.splitext(f)[1].lower() in '.jpg.jpeg']
   print(images)
   print('computing embeddings')
   filename_to_emb = compute_embeddings(images)
-  with open(FLAGS.output_file, 'w') as output_file:
+  if not os.path.isdir(os.path.join(static_dir, 'embeddings')):
+    os.mkdir(os.path.join(static_dir, 'embeddings'))
+  for img_filename, emb in filename_to_emb.iteritems():
+    emb_filename = img_filename[:-20]+'embeddings'+img_filename[-14:-4]+'.npy'
+    np.save(emb_filename, emb)
+  pickle_filename = os.path.join(static_dir, 'filename_to_emb.pkl')
+  with open(pickle_filename, 'w') as output_file:
     pickle.dump(filename_to_emb, output_file)
   embs = []
-  with open('filenames.tsv', 'w') as filenames_file:
+  '''with open('filenames.tsv', 'w') as filenames_file:
     for filename, emb in filename_to_emb.iteritems():
       filenames_file.write(filename+'\n')
       embs.append(emb)
   embs = np.array(embs)
-  np.savetxt('embs.tsv', embs, delimiter='\t')
+  np.savetxt('embs.tsv', embs, delimiter='\t')'''
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
   # classify_image_graph_def.pb:
@@ -124,7 +134,7 @@ if __name__ == '__main__':
   #   Map from synset ID to a human readable string.
   # imagenet_2012_challenge_label_map_proto.pbtxt:
   #   Text representation of a protocol buffer mapping a label to synset ID.
-  parser.add_argument(
+  parser.add_argument( # not used, assume default works
       '--model_dir',
       type=str,
       default='/tmp/imagenet',
@@ -135,16 +145,11 @@ if __name__ == '__main__':
       """
   )
   parser.add_argument(
-      '--image_dir',
+      '--data_dir',
       type=str,
-      default='training_data',
       help='Directory to recursively find images in and compute embeddings for.'
   )
-  parser.add_argument(
-      '--output_file',
-      type=str,
-      default='filename_to_embedding.pkl',
-      help='File to dump embeddings.'
-  )
   FLAGS, unparsed = parser.parse_known_args()
-  tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
+  print (sys.argv[0])
+  print (unparsed)
+  main(FLAGS.data_dir)
