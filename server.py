@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, render_template, abort, send_from_dir
 from flask_cors import CORS, cross_origin
 import time
 import os
+import random
 
 app = Flask(__name__)
 
@@ -41,7 +42,7 @@ def upload():
 	if request.args.get('groupid'):
 		groupid = request.args.get('groupid')
 	else:
-		groupid = time.time()
+		groupid = (int(time.time()) * 1000) + random.randit(0,999)
 	f = request.files.getlist('vidfiles')
 	savelocation = './videos/{0}'.format(groupid)
 	if not os.path.exists(savelocation):
