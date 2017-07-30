@@ -18,5 +18,7 @@ def main(project_id):
   if not os.path.isdir('results'):
     os.mkdir('results')
   stitch(result_seqs, os.path.join('results', project_id+'.mp4'))
+  with open(os.path.join('results', 'finished_'+project_id+'.txt'), 'w') as finished_file:
+    finished_file.write('balls')
 if __name__ == '__main__':
   result = main(sys.argv[1])
