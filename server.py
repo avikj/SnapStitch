@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, abort
+from flask_cors import CORS, cross_origin
 import time
 import os
 
@@ -14,9 +15,21 @@ def allowed_file(filename):
 def index():
 	return render_template('index.html')
 
+@app.route('/file/<groupid>')
+def file(groupid):
+	print groupid
+	if os.path.isfile(os.path.join(os.getcwd(),'results/{0}.m4v'.format(groupid))):
+		return jsonify(groupid=groupid)
+	else:
+		return 404
+
 @app.route('/add')
 def add():
-    return render_template('add.html')
+  return render_template('add.html')
+
+@app.route('/loading/<groupid>')
+def loading(groupid):
+	return render_template('loading.html', groupid=groupid)
 
 @app.route('/upload', methods=["POST"])
 def upload():
@@ -26,14 +39,15 @@ def upload():
 		groupid = request.args.get('groupid')
 	else:
 		groupid = time.time()
-	f = request.files.getlist('videoupload')
+	f = request.files.getlist('vidfiles')
 	savelocation = './videos/{0}'.format(groupid)
 	if not os.path.exists(savelocation):
 		os.makedirs(savelocation)
 	for file in f:
 		file.save(os.path.join(savelocation,file.filename))
 	endtime = time.time()
-	return jsonify(groupid=groupid)
+	totaltime = endtime-starttime
+	return jsonify(groupid=groupid, time=totaltime)
 
 if __name__ == '__main__':
 	app.run(debug=True, host="0.0.0.0")
