@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import time
 import os
 
@@ -12,7 +12,11 @@ def allowed_file(filename):
 
 @app.route('/')
 def index():
-	return "A happy little HTML page"
+	return render_template('index.html')
+
+@app.route('/add')
+def add():
+    return render_template('add.html')
 
 @app.route('/upload', methods=["POST"])
 def upload():
@@ -32,5 +36,4 @@ def upload():
 	return jsonify(groupid=groupid)
 
 if __name__ == '__main__':
-	app.run(debug=True)
-
+	app.run(debug=True, host="0.0.0.0")
