@@ -50,7 +50,7 @@ def compute_win_clust_mat(filename_to_clust, window_size=30):
 	win_clust_mat = np.vstack(np.array(win_clust_vecs))
 	return (win_clust_mat, wins)
 
-def get_best_seqs(projid, window_size=30):	
+def get_best_seqs(projid, window_size=30):
 	# load clustered frames
 	print 'loading clustered frames...'
 	with open(os.path.join('temp', projid, 'filename_to_clust.pkl'), 'rb') as stream:
@@ -95,7 +95,7 @@ def get_best_seqs(projid, window_size=30):
 	argmins = np.argmin(mat, axis=0)
 
 	vid_indices = [bisect.bisect(indices, argmin)-1 for argmin in argmins]
-		
+
 	best_seqs = [(video_names[vid_indices[x]], [int(k[-13:-4]) for k in flattened_wins[argmins[x]]], x) for x in xrange(len(vid_indices))]
 	print best_seqs
 
@@ -104,6 +104,12 @@ def get_best_seqs(projid, window_size=30):
 	for seq in best_seqs: vid_seq_dict[seq[0]].append(seq[1])
 	print '\n'
 	print vid_seq_dict
+
+	for vid in vid_seq_dict.keys():
+		vid_seq_dict[vid].sort(key=lambda x: x[0])
+
+	print vid_seq_dict
+
 	for vid in vid_seq_dict.keys():
 		vid_seq_dict[vid]
 		i = 0
@@ -118,14 +124,14 @@ def get_best_seqs(projid, window_size=30):
 					j -= 1
 				j += 1
 			i += 1
-
-
+		vid_seq_dict[vid].sort(key=lambda x: x[0])
+	print vid_seq_dict
 	return vid_seq_dict
 	# return best_seqs
 
 if __name__ == "__main__":
 	projid = sys.argv[1]
-	# window_size
-	seqs = get_best_seqs(projid)
+        window_size = 5
+	seqs = get_best_seqs(projid, window_size)
 	# print seqs
 
