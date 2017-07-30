@@ -16,4 +16,6 @@ def main(project_id):
   return result_seqs
 
 if __name__ == '__main__':
-  main(sys.argv[1])
+  result = main(sys.argv[1])
+
+  print '\n\n\nresult', result
