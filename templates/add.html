@@ -12,7 +12,7 @@
 			<div  id="input-header">Project Description</div>
 			<input class="textinput" type="text"></input>
 		</div>
-		<form action="/loading" enctype="multipart/form-data" method="post" style="background-image: url({{ url_for('static', filename='upload.png') }})">
+		<form enctype="multipart/form-data" style="background-image: url({{ url_for('static', filename='upload.png') }})">
 			<input id="vid-input" name="vidinput" type="file" multiple></input>
 		</form>
 		<p>Tap Here to select some videos</p>
