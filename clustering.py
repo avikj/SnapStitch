@@ -35,7 +35,7 @@ def get_clusters_for_project(project_id, video_names):
   embs = []
   filenames = []
   for video_name in video_names:
-    filename_to_embedding = pickle.load(open(os.path.join('static', project_id, video_name, 'filename_to_emb.pkl'))) # TODO: call get_inception_embeddings on frame dir, but for now just use the pickle
+    filename_to_embedding = pickle.load(open(os.path.join('temp', project_id, video_name, 'filename_to_emb.pkl'))) # TODO: call get_inception_embeddings on frame dir, but for now just use the pickle
     for filename, embedding in filename_to_embedding.iteritems():
       embs.append(embedding)
       filenames.append(filename)
@@ -46,7 +46,7 @@ def get_clusters_for_project(project_id, video_names):
   for i in range(len(filenames)):
     video_name = video_name_from_filename(filenames[i])
     d[video_name][filenames[i]] = labels[i]
-  with open(os.path.join('static', project_id, 'filename_to_clust.pkl'), 'w') as pickle_file:
+  with open(os.path.join('temp', project_id, 'filename_to_clust.pkl'), 'w') as pickle_file:
     pickle.dump(d, pickle_file)
   '''filenames = [filename[filename.rindex('/')+1:] for filename in filenames]
   embs = np.array(embs)
@@ -56,7 +56,7 @@ def get_clusters_from_frames(frame_dir=None):
   
   # TODO: allow multiple frame directories to be processed at once
   if frame_dir is None:
-    filename_to_embedding = pickle.load(open('static/temp_vid1_290717183249/filename_to_emb.pkl')) # TODO: call get_inception_embeddings on frame dir, but for now just use the pickle
+    filename_to_embedding = pickle.load(open('temp/temp_vid1_290717183249/filename_to_emb.pkl')) # TODO: call get_inception_embeddings on frame dir, but for now just use the pickle
     embs = []
     filenames = []
     for filename, embedding in filename_to_embedding.iteritems():
