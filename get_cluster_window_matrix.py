@@ -103,11 +103,8 @@ def get_best_seqs(projid, window_size=30):
 	vid_seq_dict = {k:[] for k in set([seq[0] for seq in best_seqs])}
 	for seq in best_seqs: vid_seq_dict[seq[0]].append(seq[1])
 	print '\n'
-	print vid_seq_dict
-
 	for vid in vid_seq_dict.keys():
 		vid_seq_dict[vid].sort(key=lambda x: x[0])
-
 	print vid_seq_dict
 
 	for vid in vid_seq_dict.keys():
