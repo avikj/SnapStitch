@@ -15,7 +15,7 @@ function run(){
 		  	var gid = JSON.parse(xhr.responseText)['groupid']
 		  	url = "/loading/" + gid
 		    window.location.href = url;
-		  }
+		  } 
 		});
 
 		xhr.open("POST", "/upload");
