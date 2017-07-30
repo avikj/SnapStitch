@@ -1,3 +1,5 @@
+*.npy
+*.pickle
 *.pkl
 *.txt
 *.m4v

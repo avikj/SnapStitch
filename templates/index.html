@@ -6,11 +6,18 @@
 	<body>
 		<div id="header">Snapstitch</div>
 		<div id="body">
-		<p id="title">Your Stitches</p>
-		<video width="320" height="240" controls>
-			<source src="{{ url_for('static', filename='Best Streetball Moves Done in the NBA.mp4')}}" type="video/mp4"
-			Your Browser is shitty
-		</video>
+		<p id="title">Your Stitch</p>
+		<div id="viddiv">
+			<div class="vidcontainer">
+				<video class="vid">
+					<source src="{{ url_for('static', filename='Best Streetball Moves Done in the NBA.mp4')}}" type="video/mp4">
+					Your Browser doesnt support
+				</video>
+				
+			</div>
+			
+            
+		</div>
 		</div>
 	</body>
 </html>
