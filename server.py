@@ -16,6 +16,9 @@ def allowed_file(filename):
 
 @app.route('/results/<filename>')
 def results(filename):
+    if not os.path.isfile(os.path.join('results', filename)):
+        abort(404)
+        return
 	return send_from_directory('results',filename)
 
 @app.route('/<groupid>')
