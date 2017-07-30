@@ -3,7 +3,7 @@ function run(gid){
 		var xhr = new XMLHttpRequest();
 
 		xhr.addEventListener("readystatechange", function () {
-			if (this.readyState === 4) {
+			if (this.readyState === 4 && xmlhttp.status == 200) {
 				window.location.href = "/" + gid
 				clearInterval(inter)
 			}
