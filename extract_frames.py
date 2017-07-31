@@ -25,6 +25,8 @@ def main(project_id, video_basename, sampling_rate=3):
     bar = progressbar.ProgressBar(maxval=101, widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
     bar.start()
     fps = vidcap.get(CV_CAP_PROP_FPS)# TODO
+    fps = fps if fps != float('nan') else 25
+    print 'actual fps', fps, 'sampling rate', sampling_rate
     success, image = vidcap.read()
     frame_count = 1
     while success:
