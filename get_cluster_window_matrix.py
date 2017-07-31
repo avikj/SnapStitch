@@ -71,6 +71,9 @@ def get_best_seqs(projid, window_size=30):
 
 	# contruct matrix for every video
 	video_names = [os.path.join('videos', projid, v+'.m4v') for v in filename_to_clust.keys()]
+	for i in range(len(video_names)):
+		if not os.path.isfile(video_names[i]):
+			video_names[i] = video_names[i][:video_names[i].rindex('.')]+'.mp4' # assume only mp4s and m4vs
 	print 'video names: ' + ' '.join(video_names)
 	mat_wins = [compute_win_clust_mat(video_clustered_frames, window_size) for video_clustered_frames in filename_to_clust.values()]
 	matrices = [mat_win[0] for mat_win in mat_wins]
