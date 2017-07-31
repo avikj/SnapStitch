@@ -53,7 +53,7 @@ def upload():
 	if not os.path.exists(savelocation):
 		os.makedirs(savelocation)
 	for file in f:
-		file.save(os.path.join(savelocation,file.filename))
+		file.save(os.path.join(savelocation,file.filename.lower()))
 	endtime = time.time()
 	totaltime = endtime-starttime
 	thread = threading.Thread(target=video_processing, args=(str(groupid),))
