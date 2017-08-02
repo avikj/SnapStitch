@@ -1,5 +1,6 @@
 # clustering.py
-
+import errno
+from shutil import copy
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.cluster import DBSCAN
@@ -39,7 +40,7 @@ def get_clusters_for_project(project_id, video_names):
     for filename, embedding in filename_to_embedding.iteritems():
       embs.append(embedding)
       filenames.append(filename)
-  labels = cluster(embs, eps=12.5, min_pts=4)
+  labels = cluster(embs, eps=12, min_pts=3)
   d = {}
   for video_name in video_names:
     d[video_name] = {}
@@ -48,10 +49,23 @@ def get_clusters_for_project(project_id, video_names):
     d[video_name][filenames[i]] = labels[i]
   with open(os.path.join('temp', project_id, 'filename_to_clust.pkl'), 'w') as pickle_file:
     pickle.dump(d, pickle_file)
+  for video_name in d:
+    for filename in d[video_name]:
+      mkdir_p(os.path.join('temp', project_id, 'clusters', str(d[video_name][filename])))
+      copy(filename, os.path.join('temp', project_id, 'clusters', str(d[video_name][filename]), os.path.basename(filename)))
   '''filenames = [filename[filename.rindex('/')+1:] for filename in filenames]
   embs = np.array(embs)
   candidates = [(11, 6)]
   candidates = [(eps, min_pts) for eps in range(7, 15) for min_pts in range(2, 10)]'''
+
+def mkdir_p(path):
+    try:
+        os.makedirs(path)
+    except OSError as exc:  # Python >2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        else:
+            raise  
 def get_clusters_from_frames(frame_dir=None):
   
   # TODO: allow multiple frame directories to be processed at once
@@ -84,5 +98,5 @@ X, labels_true = make_blobs(n_samples=750, centers=centers, cluster_std=0.4,
 
 if __name__ == '__main__':
   pp = pprint.PrettyPrinter(indent=4)
-  d = get_clusters_for_project('1234', ['vid1', 'vid2'])
+  d = get_clusters_for_project('test', ['1'])
   pp.pprint(d)
