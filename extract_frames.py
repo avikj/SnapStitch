@@ -23,6 +23,7 @@ def main(project_id, video_basename, sampling_rate=3):
     vidcap = cv2.VideoCapture(video_path)
     print('Extracting video frames...')
     bar = progressbar.ProgressBar(maxval=101, widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
+    bar.start()
     fps = vidcap.get(CV_CAP_PROP_FPS)# TODO
     fps = fps if fps != float('nan') else 25
     print 'actual fps', fps, 'sampling rate', sampling_rate
@@ -34,6 +35,7 @@ def main(project_id, video_basename, sampling_rate=3):
         success, image = vidcap.read()
         # print('Read a new frame: %f ms'% vidcap.get(CV_CAP_PROP_POS_MSEC), success)
         cv2.imwrite(os.path.join(extracted_frame_dir, "%09d.jpg" % vidcap.get(CV_CAP_PROP_POS_MSEC)), image) # TODO (might still work)
+
     bar.finish()
 
 def mkdir_p(path):

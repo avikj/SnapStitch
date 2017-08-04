@@ -9,7 +9,6 @@ from stitcher import stitch
 def main(project_id):
   video_basenames = os.listdir(os.path.join('videos', project_id))
   print 'Videos to process:', video_basenames
-
   for video_basename in video_basenames:
     print 'Extracting frames from %s.'%video_basename
     extract_frames(project_id, video_basename, sampling_rate=1)
