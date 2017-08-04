@@ -13,24 +13,13 @@ import pprint
 # input: embeddings for every frame
 # X =
 
-def cluster(X, eps=1, min_pts=30, n_clusters_=6):
-  cluster_result = DBSCAN(eps=eps, min_samples=min_pts).fit(X)
-  # cluster_result = KMeans(n_clusters_).fit(X)
-  # array of booleans, true representing a core point
-  # core_samples_mask = np.zeros_like(cluster_result.labels_, dtype=bool)
-  # core_samples_mask[cluster_result.core_sample_indices_] = True
+def cluster(X, eps=1, min_pts=30, algorithm='DBSCAN', n_clusters=10):
+  if algorithm == 'DBSCAN':
+    cluster_result = DBSCAN(eps=eps, min_samples=min_pts).fit(X)
+  elif algorithm == 'KMeans':
+    cluster_result = KMeans(n_clusters=n_clusters)
   labels = cluster_result.labels_
   return labels
-  '''# print labels
-  # Number of clusters in labels, ignoring noise if present.
-  n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0) 
-  with open('labels_eps%d_minpts%d.tsv'%(eps, min_pts), 'w') as outfile:
-  # with open('labels_%dmeans.tsv'%n_clusters_, 'w') as outfile:
-    outfile.write('Cluster\tFilename\n')
-    for i in range(len(labels)):
-      outfile.write('%d\t%s\n'%(labels[i], filenames[i]))
-  np.savetxt('embs.tsv', X, delimiter='\t')'''
-  # print n_clusters_
 
 def get_clusters_for_project(project_id, video_names):
   embs = []
@@ -80,7 +69,7 @@ def get_clusters_from_frames(frame_dir=None):
     embs = np.array(embs)
     candidates = [(11, 6)]
     candidates = [(eps, min_pts) for eps in range(7, 15) for min_pts in range(2, 10)]
-    labels = cluster(embs, filenames, eps=12.5, min_pts=4)
+    labels = cluster(embs, filenames, algorithm='KMeans', n_clusters=6)
 
 def video_name_from_filename(img_filename):
   return img_filename.split('/')[-3]

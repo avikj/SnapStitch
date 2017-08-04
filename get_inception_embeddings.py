@@ -41,7 +41,7 @@ import re
 import sys
 import tarfile
 import pickle
-
+import progressbar
 import numpy as np
 from six.moves import urllib
 import tensorflow as tf
@@ -76,11 +76,12 @@ def compute_embeddings(images):
   create_graph()
   filename_to_emb = {}
   config = tf.ConfigProto(device_count = {'GPU': 0})
+  bar = progressbar.ProgressBar(widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
   with tf.Session(config=config) as sess:
     i = 0
-    for image in images:
+    for image in bar(images):
       if not tf.gfile.Exists(image):
-        tf.logging.fatal('File does not exist %s', image)
+        tf.logging.fatal('File does not exist %s', image) 
       image_data = tf.gfile.FastGFile(image, 'rb').read()
       # Some useful tensors:
       # 'softmax:0': A tensor containing the normalized prediction across
@@ -96,7 +97,7 @@ def compute_embeddings(images):
                              {'DecodeJpeg/contents:0': image_data})
       filename_to_emb[image] = embedding.reshape(2048)
       i += 1
-      print(image, i, len(images))
+      # print(image, i, len(images))
   return filename_to_emb
 
 # temp_dir is a subdir of temp 
@@ -104,12 +105,12 @@ def main(project_id, video_name):
   '''image = (FLAGS.image_file if FLAGS.image_file else
            os.path.join(MODEL_DIR, 'cropped_panda.jpg'))'''
   temp_dir = os.path.abspath(os.path.join('temp', project_id, video_name))
-  print(temp_dir)
-  print('loading images')
+  # print(temp_dir)
+  # print('loading images')
   image_dir = os.path.join(temp_dir, 'frames')
   images = [os.path.join(dp, f) for dp, dn, filenames in os.walk(image_dir) for f in filenames if os.path.splitext(f)[1].lower() in '.jpg.jpeg']
-  print(images)
-  print('computing embeddings')
+  # print(images)
+  print('Computing embeddings for images.')
   filename_to_emb = compute_embeddings(images)
   if not os.path.isdir(os.path.join(temp_dir, 'embeddings')):
     os.mkdir(os.path.join(temp_dir, 'embeddings'))
