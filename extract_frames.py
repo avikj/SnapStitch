@@ -23,21 +23,17 @@ def main(project_id, video_basename, sampling_rate=3):
     vidcap = cv2.VideoCapture(video_path)
     print('Extracting video frames...')
     bar = progressbar.ProgressBar(maxval=101, widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
-    bar.start()
     fps = vidcap.get(CV_CAP_PROP_FPS)# TODO
     fps = fps if fps != float('nan') else 25
     print 'actual fps', fps, 'sampling rate', sampling_rate
     success, image = vidcap.read()
-    frame_count = 1
-    while success:
+    frames_to_extract = range(0, int(vidcap.get(CV_CAP_PROP_FRAME_COUNT)), int(round(fps / sampling_rate)))
+    frame_count = len(frames_to_extract)
+    for frame_pos in bar(frames_to_extract):
+        vidcap.set(CV_CAP_PROP_POS_FRAMES, frame_pos)
         success, image = vidcap.read()
-        if frame_count % int(round(fps / sampling_rate)) == 0:
-            # print('Read a new frame: %f ms'% vidcap.get(CV_CAP_PROP_POS_MSEC), success)
-            cv2.imwrite(os.path.join(extracted_frame_dir, "%09d.jpg" % vidcap.get(CV_CAP_PROP_POS_MSEC)), image) # TODO (might still work)
-        vidcap.get(CV_CAP_PROP_POS_MSEC) # TODO
-        percent = vidcap.get(CV_CAP_PROP_POS_FRAMES) / int(vidcap.get(CV_CAP_PROP_FRAME_COUNT))#TODO
-        bar.update(100 * percent)
-        frame_count += 1
+        # print('Read a new frame: %f ms'% vidcap.get(CV_CAP_PROP_POS_MSEC), success)
+        cv2.imwrite(os.path.join(extracted_frame_dir, "%09d.jpg" % vidcap.get(CV_CAP_PROP_POS_MSEC)), image) # TODO (might still work)
     bar.finish()
 
 def mkdir_p(path):
@@ -49,4 +45,4 @@ def mkdir_p(path):
         else:
             raise
 if __name__ == '__main__':
-    main('videos/vid1.m4v')
+    main('test', '1.mp4')
