@@ -7,6 +7,7 @@ from sklearn.cluster import DBSCAN
 from sklearn.cluster import KMeans
 from sklearn.datasets.samples_generator import make_blobs
 from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
 import pickle
 import os
 import pprint
@@ -17,8 +18,9 @@ def cluster(X, eps=1, min_pts=30, algorithm='DBSCAN', n_clusters=10):
   if algorithm == 'DBSCAN':
     cluster_result = DBSCAN(eps=eps, min_samples=min_pts).fit(X)
   elif algorithm == 'KMeans':
-    cluster_result = KMeans(n_clusters=n_clusters)
+    cluster_result = KMeans(n_clusters=n_clusters).fit(X)
   labels = cluster_result.labels_
+  print labels
   return labels
 
 def get_clusters_for_project(project_id, video_names):
@@ -29,7 +31,7 @@ def get_clusters_for_project(project_id, video_names):
     for filename, embedding in filename_to_embedding.iteritems():
       embs.append(embedding)
       filenames.append(filename)
-  labels = cluster(embs, eps=12, min_pts=3)
+  labels = cluster(embs, algorithm='KMeans', n_clusters=10)
   d = {}
   for video_name in video_names:
     d[video_name] = {}
@@ -69,7 +71,8 @@ def get_clusters_from_frames(frame_dir=None):
     embs = np.array(embs)
     candidates = [(11, 6)]
     candidates = [(eps, min_pts) for eps in range(7, 15) for min_pts in range(2, 10)]
-    labels = cluster(embs, filenames, algorithm='KMeans', n_clusters=6)
+    reduced = PCA().fit(embs).transform(embs)
+    labels = cluster(embs, filenames, algorithm='KMeans', n_clusters=10)
 
 def video_name_from_filename(img_filename):
   return img_filename.split('/')[-3]
@@ -87,5 +90,5 @@ X, labels_true = make_blobs(n_samples=750, centers=centers, cluster_std=0.4,
 
 if __name__ == '__main__':
   pp = pprint.PrettyPrinter(indent=4)
-  d = get_clusters_for_project('test', ['1'])
+  d = get_clusters_for_project('1234', ['vid1', 'vid2'])
   pp.pprint(d)
